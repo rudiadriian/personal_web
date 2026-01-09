@@ -1,51 +1,22 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Create The Application
-|--------------------------------------------------------------------------
-|
-| The first thing we will do is create a new Laravel application instance
-| which serves as the "glue" for all the components of Laravel, and is
-| the IoC container for the system binding all of the various parts.
-|
-*/
-
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
 /*
-|--------------------------------------------------------------------------
-| Vercel Compatibility Fix
-|--------------------------------------------------------------------------
-|
-| Laravel secara default menulis cache ke folder storage. Karena Vercel
-| bersifat Read-Only, kita alihkan semua jalur penulisan ke folder /tmp
-| hanya jika aplikasi berjalan di lingkungan Vercel.
-|
+| Konfigurasi Khusus Vercel
+| Kita alihkan folder storage dan cache ke /tmp agar tidak Error 500
 */
-
-if (isset($_SERVER['VERCEL_URL']) || env('APP_ENV') === 'production') {
-    // Paksa Laravel menggunakan folder /tmp untuk storage
+if (isset($_SERVER['VERCEL_URL'])) {
+    // Gunakan folder /tmp untuk storage (sessions, views, cache)
     $app->useStoragePath('/tmp/storage');
 
-    // Paksa Laravel menggunakan folder /tmp untuk bootstrap cache
+    // Paksa folder bootstrap cache ke /tmp agar bisa ditulis (Writable)
     $app->bind('path.bootstrap', function () {
         return '/tmp/bootstrap';
     });
 }
-
-/*
-|--------------------------------------------------------------------------
-| Bind Important Interfaces
-|--------------------------------------------------------------------------
-|
-| Next, we need to bind some important interfaces into the container so
-| we will be able to resolve them when needed. The kernels serve the
-| incoming requests to this application from both the web and CLI.
-|
-*/
 
 $app->singleton(
     Illuminate\Contracts\Http\Kernel::class,
@@ -61,16 +32,5 @@ $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     App\Exceptions\Handler::class
 );
-
-/*
-|--------------------------------------------------------------------------
-| Return The Application
-|--------------------------------------------------------------------------
-|
-| This script returns the application instance. The instance is given to
-| the calling script so we can separate the building of the instances
-| from the actual running of the application and sending responses.
-|
-*/
 
 return $app;
