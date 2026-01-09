@@ -17,6 +17,27 @@ $app = new Illuminate\Foundation\Application(
 
 /*
 |--------------------------------------------------------------------------
+| Vercel Compatibility Fix
+|--------------------------------------------------------------------------
+|
+| Laravel secara default menulis cache ke folder storage. Karena Vercel
+| bersifat Read-Only, kita alihkan semua jalur penulisan ke folder /tmp
+| hanya jika aplikasi berjalan di lingkungan Vercel.
+|
+*/
+
+if (isset($_SERVER['VERCEL_URL']) || env('APP_ENV') === 'production') {
+    // Paksa Laravel menggunakan folder /tmp untuk storage
+    $app->useStoragePath('/tmp/storage');
+
+    // Paksa Laravel menggunakan folder /tmp untuk bootstrap cache
+    $app->bind('path.bootstrap', function () {
+        return '/tmp/bootstrap';
+    });
+}
+
+/*
+|--------------------------------------------------------------------------
 | Bind Important Interfaces
 |--------------------------------------------------------------------------
 |
