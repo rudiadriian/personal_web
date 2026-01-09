@@ -11,22 +11,6 @@ class PortfolioController extends Controller
 {
     public function index(Request $request)
     {
-        if (!$request->session()->has('visited')) {
-            try {
-                \App\Models\Visitor::create([
-                    'ip_address' => $request->ip(),
-                    'user_agent' => $request->userAgent()
-                ]);
-                $request->session()->put('visited', true);
-            } catch (\Exception $e) {}
-        }
-
-        try {
-            $totalVisitors = \App\Models\Visitor::count();
-        } catch (\Exception $e) {
-            $totalVisitors = 0;
-        }
-
         $isId = App::getLocale() == 'id';
         $projects = [
             [
@@ -195,7 +179,7 @@ class PortfolioController extends Controller
             ],
         ];
 
-        return view('welcome', compact('totalVisitors', 'projects'));
+        return view('welcome', compact('projects'));
     }
 
     public function switchLang($lang)
