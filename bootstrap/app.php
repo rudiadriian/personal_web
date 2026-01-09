@@ -4,9 +4,14 @@ $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
-// Jalankan ini hanya jika di server Vercel
+// PENTING: Pindahkan jalur bootstrap cache ke /tmp agar Laravel bisa menulis manifest
 if (isset($_SERVER['VERCEL_URL'])) {
     $app->useStoragePath('/tmp/storage');
+
+    // Paksa Laravel menganggap folder bootstrap berada di /tmp
+    $app->bind('path.bootstrap', function () {
+        return '/tmp/bootstrap';
+    });
 }
 
 $app->singleton(
