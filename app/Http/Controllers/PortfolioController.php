@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
-use App\Models\Visitor;
 
 class PortfolioController extends Controller
 {
     public function index(Request $request)
     {
+        // Deteksi bahasa aktif
         $isId = App::getLocale() == 'id';
+
         $projects = [
             [
                 'title' => $isId ? 'Sistem Laporan Harian' : 'Daily Report System',
@@ -45,7 +46,6 @@ class PortfolioController extends Controller
                     ? 'Menyediakan data real-time stok, harga, pengiriman, dan penerimaan beras di pasar.'
                     : 'Providing real-time data on stock, prices, deliveries, and rice receipts in the market.'
             ],
-
             [
                 'title' => $isId ? 'Sistem E-Office' : 'E-Office System',
                 'category' => 'Management',
@@ -86,7 +86,6 @@ class PortfolioController extends Controller
                     ? 'Mengelola dan menjadwalkan agenda untuk jajaran eksekutif perusahaan.'
                     : 'Managing and scheduling agendas for high-level executives.'
             ],
-
             [
                 'title' => $isId ? 'Sistem E-Procurement' : 'E-Procurement System',
                 'category' => 'Finance',
@@ -119,7 +118,6 @@ class PortfolioController extends Controller
                     ? 'Melacak dan mengingatkan kebutuhan dokumen legalitas untuk produk baru.'
                     : 'Tracking and reminding legal document requirements for products.'
             ],
-
             [
                 'title' => $isId ? 'Sistem Pemesanan Mitra' : 'Mitra Ordering System',
                 'category' => 'Sales',
@@ -144,7 +142,6 @@ class PortfolioController extends Controller
                     ? 'Memungkinkan pelaporan anonim untuk dugaan pelanggaran etika/aturan.'
                     : 'Enabling anonymous reporting for ethical violations.'
             ],
-
             [
                 'title' => $isId ? 'Migrasi Accurate Desktop ke Online' : 'Migration Accurate Desktop to Online',
                 'category' => 'Migration',
